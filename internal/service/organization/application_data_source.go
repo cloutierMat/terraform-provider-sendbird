@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 var _ datasource.DataSource = &ApplicationDataSource{}
@@ -100,6 +101,7 @@ func (d *ApplicationDataSource) Read(ctx context.Context, req datasource.ReadReq
 		return
 	}
 
+	tflog.Debug(ctx, "Reading application", map[string]interface{}{"app_id": data.Id.ValueString()})
 	application, err := d.client.GetApplication(data.Id.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Error getting application", err.Error())

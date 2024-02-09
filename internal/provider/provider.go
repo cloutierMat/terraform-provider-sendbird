@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 var _ provider.Provider = &SendbirdProvider{}
@@ -50,7 +51,7 @@ func (p *SendbirdProvider) Schema(_ context.Context, _ provider.SchemaRequest, r
 
 func (p *SendbirdProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
 	var config SendbirdProviderModel
-
+	tflog.Debug(ctx, "Configuring Terraform Sendbird Provider")
 	diags := req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -109,12 +110,14 @@ func (p *SendbirdProvider) Configure(ctx context.Context, req provider.Configure
 }
 
 func (p *SendbirdProvider) Resources(ctx context.Context) []func() resource.Resource {
+	tflog.Debug(ctx, "Registering Terraform Sendbird Provider resources")
 	return []func() resource.Resource{
 		// NewSendbirdUserResource,
 	}
 }
 
 func (p *SendbirdProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+	tflog.Debug(ctx, "Registering Terraform Sendbird Provider data sources")
 	return []func() datasource.DataSource{
 		organization.NewApplicationDataSource,
 	}
