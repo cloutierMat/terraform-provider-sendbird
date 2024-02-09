@@ -1,10 +1,11 @@
-package organization
+package application
 
 import (
 	"context"
 	"fmt"
 
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/client"
+	"github.com/cloutierMat/terraform-provider-sendbird/internal/service/models"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -19,19 +20,6 @@ func NewApplicationDataSource() datasource.DataSource {
 
 type ApplicationDataSource struct {
 	client *client.SendbirdClient
-}
-
-type RegionModel struct {
-	Name types.String `tfsdk:"name"`
-	Key  types.String `tfsdk:"key"`
-}
-
-type ApplicationDataSourceModel struct {
-	Id        types.String `tfsdk:"id"`
-	Name      types.String `tfsdk:"name"`
-	ApiToken  types.String `tfsdk:"api_token"`
-	CreatedAt types.String `tfsdk:"created_at"`
-	Region    *RegionModel `tfsdk:"region"`
 }
 
 func (d *ApplicationDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -59,17 +47,13 @@ func (d *ApplicationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 				MarkdownDescription: "Created At",
 				Computed:            true,
 			},
-			"region": schema.SingleNestedAttribute{
-				MarkdownDescription: "Region",
+			"region_key": schema.StringAttribute{
+				MarkdownDescription: "Region Key",
 				Computed:            true,
-				Attributes: map[string]schema.Attribute{
-					"key": schema.StringAttribute{
-						Computed: true,
-					},
-					"name": schema.StringAttribute{
-						Computed: true,
-					},
-				},
+			},
+			"region_name": schema.StringAttribute{
+				MarkdownDescription: "Region Name",
+				Computed:            true,
 			},
 		},
 	}
@@ -84,7 +68,7 @@ func (d *ApplicationDataSource) Configure(ctx context.Context, req datasource.Co
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected *http.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *client.SendbirdClient, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 		return
 	}
@@ -93,7 +77,7 @@ func (d *ApplicationDataSource) Configure(ctx context.Context, req datasource.Co
 }
 
 func (d *ApplicationDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data ApplicationDataSourceModel
+	var data models.ApplicationModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -108,15 +92,13 @@ func (d *ApplicationDataSource) Read(ctx context.Context, req datasource.ReadReq
 		return
 	}
 
-	state := ApplicationDataSourceModel{
-		Id:        types.StringValue(application.Id),
-		Name:      types.StringValue(application.Name),
-		ApiToken:  types.StringValue(application.ApiToken),
-		CreatedAt: types.StringValue(application.CreatedAt),
-		Region: &RegionModel{
-			Name: types.StringValue(application.Region.Name),
-			Key:  types.StringValue(application.Region.Key),
-		},
+	state := models.ApplicationModel{
+		Id:         types.StringValue(application.Id),
+		Name:       types.StringValue(application.Name),
+		ApiToken:   types.StringValue(application.ApiToken),
+		CreatedAt:  types.StringValue(application.CreatedAt),
+		RegionKey:  types.StringValue(application.Region.Key),
+		RegionName: types.StringValue(application.Region.Name),
 	}
 
 	diags := resp.State.Set(ctx, &state)

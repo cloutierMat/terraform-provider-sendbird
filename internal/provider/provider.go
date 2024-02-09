@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/client"
-	"github.com/cloutierMat/terraform-provider-sendbird/internal/service/organization"
+	"github.com/cloutierMat/terraform-provider-sendbird/internal/service/application"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -112,14 +112,14 @@ func (p *SendbirdProvider) Configure(ctx context.Context, req provider.Configure
 func (p *SendbirdProvider) Resources(ctx context.Context) []func() resource.Resource {
 	tflog.Debug(ctx, "Registering Terraform Sendbird Provider resources")
 	return []func() resource.Resource{
-		// NewSendbirdUserResource,
+		application.NewApplicationResource,
 	}
 }
 
 func (p *SendbirdProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	tflog.Debug(ctx, "Registering Terraform Sendbird Provider data sources")
 	return []func() datasource.DataSource{
-		organization.NewApplicationDataSource,
+		application.NewApplicationDataSource,
 	}
 }
 
