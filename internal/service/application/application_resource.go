@@ -6,6 +6,7 @@ import (
 
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/client"
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/service/models"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -164,4 +165,8 @@ func (r *ApplicationResource) Delete(_ context.Context, req resource.DeleteReque
 		resp.Diagnostics.AddError("Error deleting application", err.Error())
 		return
 	}
+}
+
+func (r *ApplicationResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
