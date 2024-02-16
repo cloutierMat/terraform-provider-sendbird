@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/client"
-	"github.com/cloutierMat/terraform-provider-sendbird/internal/service/models"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -23,6 +22,15 @@ func NewApplicationResource() resource.Resource {
 
 type ApplicationResource struct {
 	client *client.SendbirdClient
+}
+
+type ApplicationResourceModel struct {
+	Id         types.String `tfsdk:"id"`
+	Name       types.String `tfsdk:"name"`
+	ApiToken   types.String `tfsdk:"api_token"`
+	CreatedAt  types.String `tfsdk:"created_at"`
+	RegionKey  types.String `tfsdk:"region_key"`
+	RegionName types.String `tfsdk:"region_name"`
 }
 
 func (r *ApplicationResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,7 +98,7 @@ func (r *ApplicationResource) Configure(_ context.Context, req resource.Configur
 }
 
 func (r *ApplicationResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan models.ApplicationModel
+	var plan ApplicationResourceModel
 	diags := req.Plan.Get(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -118,7 +126,7 @@ func (r *ApplicationResource) Create(ctx context.Context, req resource.CreateReq
 }
 
 func (r *ApplicationResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data models.ApplicationModel
+	var data ApplicationResourceModel
 
 	diags := req.State.Get(ctx, &data)
 	resp.Diagnostics.Append(diags...)
@@ -133,7 +141,7 @@ func (r *ApplicationResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	state := models.ApplicationModel{
+	state := ApplicationResourceModel{
 		Id:         types.StringValue(application.Id),
 		Name:       types.StringValue(application.Name),
 		ApiToken:   types.StringValue(application.ApiToken),
@@ -153,7 +161,7 @@ func (r *ApplicationResource) Update(_ context.Context, req resource.UpdateReque
 }
 
 func (r *ApplicationResource) Delete(_ context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state models.ApplicationModel
+	var state ApplicationResourceModel
 	diags := req.State.Get(context.Background(), &state)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {

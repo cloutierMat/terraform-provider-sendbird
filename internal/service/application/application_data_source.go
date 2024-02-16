@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/client"
-	"github.com/cloutierMat/terraform-provider-sendbird/internal/service/models"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -13,6 +12,17 @@ import (
 )
 
 var _ datasource.DataSource = &ApplicationDataSource{}
+
+const ServiceName = "application"
+
+type ApplicationDataSourceModel struct {
+	Id         types.String `tfsdk:"id"`
+	Name       types.String `tfsdk:"name"`
+	ApiToken   types.String `tfsdk:"api_token"`
+	CreatedAt  types.String `tfsdk:"created_at"`
+	RegionKey  types.String `tfsdk:"region_key"`
+	RegionName types.String `tfsdk:"region_name"`
+}
 
 func NewApplicationDataSource() datasource.DataSource {
 	return &ApplicationDataSource{}
@@ -23,7 +33,7 @@ type ApplicationDataSource struct {
 }
 
 func (d *ApplicationDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_application"
+	resp.TypeName = req.ProviderTypeName + "_" + ServiceName
 }
 
 func (d *ApplicationDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
@@ -77,7 +87,7 @@ func (d *ApplicationDataSource) Configure(ctx context.Context, req datasource.Co
 }
 
 func (d *ApplicationDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data models.ApplicationModel
+	var data ApplicationDataSourceModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -92,7 +102,7 @@ func (d *ApplicationDataSource) Read(ctx context.Context, req datasource.ReadReq
 		return
 	}
 
-	state := models.ApplicationModel{
+	state := ApplicationDataSourceModel{
 		Id:         types.StringValue(application.Id),
 		Name:       types.StringValue(application.Name),
 		ApiToken:   types.StringValue(application.ApiToken),
