@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/client"
+	"github.com/cloutierMat/terraform-provider-sendbird/internal/docs"
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/service/application"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -38,11 +39,11 @@ func (p *SendbirdProvider) Schema(_ context.Context, _ provider.SchemaRequest, r
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"api_key": schema.StringAttribute{
-				MarkdownDescription: "API Key for the Sendbird Organisation",
+				MarkdownDescription: docs.ProviderApiKey,
 				Optional:            true,
 			},
 			"host": schema.StringAttribute{
-				MarkdownDescription: "Sendbird Organisation host api",
+				MarkdownDescription: docs.ProviderHost,
 				Optional:            true,
 			},
 		},

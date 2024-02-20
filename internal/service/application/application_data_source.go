@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/client"
+	"github.com/cloutierMat/terraform-provider-sendbird/internal/docs"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -41,28 +42,28 @@ func (d *ApplicationDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 		MarkdownDescription: "Application data source",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				MarkdownDescription: "App Id",
+				MarkdownDescription: docs.ApplicationDataSourceId,
 				Required:            true,
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: "App Name",
+				MarkdownDescription: docs.ApplicationDataSourceName,
 				Computed:            true,
 			},
 			"api_token": schema.StringAttribute{
-				MarkdownDescription: "Api Token",
+				MarkdownDescription: docs.ApplicationDataSourceApiToken,
 				Computed:            true,
 				Sensitive:           true,
 			},
 			"created_at": schema.StringAttribute{
-				MarkdownDescription: "Created At",
+				MarkdownDescription: docs.ApplicationDataSourceCreatedAt,
 				Computed:            true,
 			},
 			"region_key": schema.StringAttribute{
-				MarkdownDescription: "Region Key",
+				MarkdownDescription: docs.ApplicationDataSourceRegionKey,
 				Computed:            true,
 			},
 			"region_name": schema.StringAttribute{
-				MarkdownDescription: "Region Name",
+				MarkdownDescription: docs.ApplicationDataSourceRegionName,
 				Computed:            true,
 			},
 		},

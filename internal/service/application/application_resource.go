@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/client"
+	"github.com/cloutierMat/terraform-provider-sendbird/internal/docs"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -43,37 +44,34 @@ func (r *ApplicationResource) Schema(_ context.Context, _ resource.SchemaRequest
 		MarkdownDescription: "Application Resource",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				MarkdownDescription: "App Id",
+				MarkdownDescription: docs.ApplicationResourceId,
 				Computed:            true,
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: "App Name. While this value could change without replacing the application, " +
-					"Sendbird isn't exposing an API to modify the name. If a name change is required, it is possible to" +
-					"change the value on the console and in the configuration. The next `terraform apply` will appropriately" +
-					"detect the change and won't replace the application",
-				Required: true,
+				MarkdownDescription: docs.ApplicationResourceName,
+				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"api_token": schema.StringAttribute{
-				MarkdownDescription: "Api Token",
+				MarkdownDescription: docs.ApplicationResourceApiToken,
 				Computed:            true,
 				Sensitive:           true,
 			},
 			"created_at": schema.StringAttribute{
-				MarkdownDescription: "Created At",
+				MarkdownDescription: docs.ApplicationResourceCreatedAt,
 				Computed:            true,
 			},
 			"region_key": schema.StringAttribute{
-				MarkdownDescription: "Region Key",
+				MarkdownDescription: docs.ApplicationResourceRegionKey,
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"region_name": schema.StringAttribute{
-				MarkdownDescription: "Region Name",
+				MarkdownDescription: docs.ApplicationResourceRegionName,
 				Computed:            true,
 			},
 		},
