@@ -35,3 +35,11 @@ make testacc TESTS=TestAccApplicationDataSource_
 # or combined
 make testacc TESTS=_create PKG=application
 ```
+
+### Creating the documentation
+
+You can ganarate the documentation for the Sendbird provider by using the following make command.
+
+```sh
+make docs
+```

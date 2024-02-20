@@ -12,6 +12,10 @@ default: build
 build:
 	go install
 
+docs: fmtcheck
+	terraform fmt -recursive ./examples/
+	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
+
 fmt: 
 	@echo "==> Fixing source code with gofmt..."
 	gofmt -s -w ./internal ./main.go

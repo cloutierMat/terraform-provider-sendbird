@@ -1,0 +1,1 @@
+terraform import sendbird_application.example APPLICATION_ID
