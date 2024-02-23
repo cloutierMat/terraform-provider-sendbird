@@ -25,7 +25,7 @@ resource "sendbird_application" "example" {
 ### Required
 
 - `name` (String) Specifies the unique name of the application. This parameter is case-insensitive. While this value could change without replacing the application, Sendbird isn't exposing an API to modify the name. If a name change is required, it is possible to change the value on the console and in the configuration. The next terraform apply will appropriately detect the change and won't replace the application
-- `region_key` (String) Specifies the code of the region. Acceptable values are listed on the [Sendbird Dashboard](https://dashboard.sendbird.com/auth/signin) under Organization settings > General > API Key > Regions.
+- `region_key` (String) Specifies the code of the region. Acceptable values are listed on the [Sendbird Dashboard](https://dashboard.sendbird.com/auth/signin) under Organization settings > General > API Key > Regions. This value can't be changed after the application is created. Any change would result in replacing the application.
 
 ### Read-Only
 

@@ -10,15 +10,18 @@ endif
 default: build
 
 build:
-	go install
+	go build -v ./...
 
-docs: fmtcheck
-	terraform fmt -recursive ./examples/
-	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
+install: build
+	go install -v ./...
+
+generate:
+	go generate ./...
+	cd tools; go generate ./...
 
 fmt: 
 	@echo "==> Fixing source code with gofmt..."
-	gofmt -s -w ./internal ./main.go
+	gofmt -s -w -e .
 
 fmtcheck:
 	@sh -c "'$(CURDIR)/.scripts/gofmtcheck.sh'"

@@ -27,5 +27,5 @@ provider "sendbird" {}
 
 ### Optional
 
-- `api_key` (String) API Key for the Sendbird Organisation
-- `host` (String) Sendbird Organisation host api
+- `api_key` (String) API Key for the Sendbird Organisation. This value can also be passed through SENDBIRD environment variable.
+- `host` (String) Host url for the Sendbird Organisation. This value can also be passed through SENDBIRD environment variable.
