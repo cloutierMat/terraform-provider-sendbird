@@ -1,0 +1,36 @@
+name: "Format and Documentation"
+
+on:
+    pull_request:
+        branches: [main]
+        paths-ignore:
+            - "README.md"
+
+jobs:
+    build:
+        name: "Build"
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            - name: Checkout
+              uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+            - name: Setup Go
+              uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
+              with:
+                  go-version-file: "go.mod"
+                  cache: true
+
+            - name: Format
+              run: make fmt
+
+            - name: Generate
+              run: make generate
+
+            - name: Confirm no diff
+              run: |
+                  git diff --compact-summary --exit-code || \
+                    (echo "*** Unexpected differences after code generation. Run 'make generate' and commit."; exit 1)
+
+            - name: Build
+              run: make build
