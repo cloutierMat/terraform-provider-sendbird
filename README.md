@@ -71,3 +71,19 @@ this every time you make changes to the provider locally.
 
 Then, setup your environment following [these instructions](https://www.terraform.io/plugin/debugging#terraform-cli-development-overrides)
 to make your local terraform use your local build.
+
+### Testing GitHub Actions
+
+This project uses [GitHub Actions](https://docs.github.com/en/actions/automating-builds-and-tests) to realize its CI.
+
+Sometimes it might be helpful to locally reproduce the behaviour of those actions,
+and for this we use [act](https://github.com/nektos/act). Once installed, you can _simulate_ the actions executed
+when opening a PR with:
+
+```shell
+# List of workflows for the 'pull_request' action
+$ act -l pull_request
+
+# Execute the workflows associated with the `pull_request' action 
+$ act pull_request
+```
