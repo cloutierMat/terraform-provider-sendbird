@@ -16,7 +16,7 @@ func TestAccApplicationResource_basic(t *testing.T) {
 	region := names.RegionDefaultKey
 	resourceName := "sendbird_application.test"
 
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.PreCheck(t) },
 		ProtoV6ProviderFactories: acctest.ProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
@@ -46,7 +46,7 @@ func TestAccApplicationResource_updateName(t *testing.T) {
 	randNameUpdated := sdkacctest.RandomWithPrefix(acctest.ResourcePrefix)
 	region := names.RegionDefaultKey
 	resourceName := "sendbird_application.test"
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.PreCheck(t) },
 		ProtoV6ProviderFactories: acctest.ProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
@@ -76,7 +76,7 @@ func TestAccApplicationResource_updateRegion(t *testing.T) {
 	region := names.RegionCanadaCentral1Key
 	regionUpdated := names.RegionNorthVirginia2Key
 	resourceName := "sendbird_application.test"
-	resource.Test(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		PreCheck:                 func() { acctest.PreCheck(t) },
 		ProtoV6ProviderFactories: acctest.ProtoV6ProviderFactories,
 		Steps: []resource.TestStep{

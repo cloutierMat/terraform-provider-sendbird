@@ -30,4 +30,4 @@ test: fmtcheck
 	go test ./$(PKG_NAME)/...
 
 testacc: fmtcheck
-	TF_ACC=1 go test ./$(PKG_NAME)/... -v $(RUNARGS) $(TESTARGS)
+	TF_ACC=1 go test ./$(PKG_NAME)/... -v $(RUNARGS)
