@@ -3,6 +3,7 @@ package provider
 import (
 	"context"
 	"os"
+	"strconv"
 
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/client"
 	"github.com/cloutierMat/terraform-provider-sendbird/internal/docs"
@@ -26,8 +27,10 @@ type SendbirdProvider struct {
 }
 
 type SendbirdProviderModel struct {
-	ApiKey types.String `tfsdk:"api_key"`
-	Host   types.String `tfsdk:"host"`
+	ApiKey                types.String `tfsdk:"api_key"`
+	Host                  types.String `tfsdk:"host"`
+	ApplicationRateLimit  types.Int64  `tfsdk:"application_rate_limit"`
+	OrganizationRateLimit types.Int64  `tfsdk:"organization_rate_limit"`
 }
 
 func (p *SendbirdProvider) Metadata(_ context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -44,6 +47,14 @@ func (p *SendbirdProvider) Schema(_ context.Context, _ provider.SchemaRequest, r
 			},
 			"host": schema.StringAttribute{
 				MarkdownDescription: docs.ProviderHost,
+				Optional:            true,
+			},
+			"application_rate_limit": schema.Int64Attribute{
+				MarkdownDescription: docs.ProviderApplicationRateLimit,
+				Optional:            true,
+			},
+			"organization_rate_limit": schema.Int64Attribute{
+				MarkdownDescription: docs.ProviderOrganizationRateLimit,
 				Optional:            true,
 			},
 		},
@@ -92,6 +103,26 @@ func (p *SendbirdProvider) Configure(ctx context.Context, req provider.Configure
 		host = config.Host.ValueString()
 	}
 
+	applicationRateLimit, err := strconv.Atoi(os.Getenv("SENDBIRD_APPLICATION_RATE_LIMIT"))
+	if err != nil {
+		applicationRateLimit = client.ApplicationDefaultRateLimit
+	}
+
+	organizationRateLimit, err := strconv.Atoi(os.Getenv("SENDBIRD_ORGANIZATION_RATE_LIMIT"))
+	if err != nil {
+		organizationRateLimit = client.OrganizationDefaultRateLimit
+	}
+
+	if !config.ApplicationRateLimit.IsNull() {
+		applicationRateLimit = int(config.ApplicationRateLimit.ValueInt64())
+	}
+
+	if !config.OrganizationRateLimit.IsNull() {
+		organizationRateLimit = int(config.OrganizationRateLimit.ValueInt64())
+	}
+
+	rateLimiter := client.GetRateLimiter(applicationRateLimit, organizationRateLimit)
+
 	if apiKey == "" {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("api_key"),
@@ -104,7 +135,7 @@ func (p *SendbirdProvider) Configure(ctx context.Context, req provider.Configure
 		return
 	}
 
-	client := client.New(host, apiKey)
+	client := client.New(host, apiKey, rateLimiter)
 
 	resp.DataSourceData = client
 	resp.ResourceData = client
