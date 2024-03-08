@@ -28,7 +28,7 @@ func (c *SendbirdClient) GetApplication(appId string) (*Application, error) {
 		return nil, err
 	}
 
-	body, err := c.doRequest(req)
+	body, err := c.doRequest(req, c.rateLimiter.organisationRateLimiter)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func (c *SendbirdClient) CreateApplication(app_name string, region_key string) (
 
 	req.Header.Add("Content-Type", "application/json")
 
-	body, err := c.doRequest(req)
+	body, err := c.doRequest(req, c.rateLimiter.organisationRateLimiter)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func (c *SendbirdClient) DeleteApplication(appId string) error {
 		return err
 	}
 
-	_, err = c.doRequest(req)
+	_, err = c.doRequest(req, c.rateLimiter.organisationRateLimiter)
 	if err != nil {
 		return err
 	}

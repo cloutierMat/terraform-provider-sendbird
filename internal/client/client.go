@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"go.uber.org/ratelimit"
 )
 
 const HostUrl string = "https://gate.sendbird.com/api/v2"
@@ -13,10 +15,11 @@ type SendbirdClient struct {
 	HostURL string
 	ApiKey  string
 
-	httpClient *http.Client
+	httpClient  *http.Client
+	rateLimiter *RateLimiter
 }
 
-func New(host string, apiKey string) *SendbirdClient {
+func New(host string, apiKey string, rateLimiter *RateLimiter) *SendbirdClient {
 	c := SendbirdClient{
 		HostURL:    HostUrl,
 		ApiKey:     apiKey,
@@ -27,12 +30,15 @@ func New(host string, apiKey string) *SendbirdClient {
 		c.HostURL = host
 	}
 
+	c.rateLimiter = rateLimiter
+
 	return &c
 }
 
-func (c *SendbirdClient) doRequest(req *http.Request) ([]byte, error) {
+func (c *SendbirdClient) doRequest(req *http.Request, rateLimiter ratelimit.Limiter) ([]byte, error) {
 	req.Header.Set("SENDBIRDORGANIZATIONAPITOKEN", c.ApiKey)
 
+	rateLimiter.Take()
 	res, err := c.httpClient.Do(req)
 
 	if err != nil {
