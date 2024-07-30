@@ -1,5 +1,9 @@
 # Terraform Sendbird Provider
 
+No longer Working on project. While I enjoyed starting to work on this, the main reason for me to start this body of work was to help manage applications. Unfortunately, the rate limit on Sendbir's Applications API is 10/minutes. Rendering testing an absolute nigthmare and tehy were unresponsive while trying to reach out through customer support.
+
+As such, I will no longer work on this project.
+
 Initial Project to develop a Terraform provider for Senbird.
 Contributions are welcome and if some resources would be of a higher priority for you, please create an issue
 and I will add it to my priority list.
